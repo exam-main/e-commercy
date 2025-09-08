@@ -1,20 +1,25 @@
-import React from 'react'
-import Navbar from './components/Navbar'
-import SearchBar from './components/SearchBar'
-import Hero from './components/Hero'
-import Recommended from './components/Recommended'
-import WhyChooseUs from './components/WhyChooseUs'
-import Category1 from './components/Category1'
-import HeroSection from './components/HeroSection'
-import RecentProperti from './components/RecentProperti'
-import Testimonials from './components/Testimonials'
-import Footer from './components/Footer'
-import { CgAttachment } from 'react-icons/cg'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
+import Navbar from './components/Navbar';
+import SearchBar from './components/SearchBar';
+import Hero from './components/Hero';
+import Recommended from './components/Recommended';
+import WhyChooseUs from './components/WhyChooseUs';
+import Category1 from './components/Category1';
+import HeroSection from './components/HeroSection';
+import RecentProperti from './components/RecentProperti';
+import Testimonials from './components/Testimonials';
+import Footer from './components/Footer';
+
+
+import Properties from './pages/property';  
+import Contact from './pages/Caontact';
+
+
+function Home() {
   return (
-    <div>
-      <Navbar/>
+    <>
       <SearchBar/>
       <Hero/>
       <Recommended/>
@@ -24,8 +29,23 @@ function App() {
       <RecentProperti/>
       <Testimonials/>
       <Footer/>
-    </div>
+    </>
   )
 }
 
-export default App
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/contact" element={<Contact />} />
+        
+      </Routes>
+    </Router>
+  );
+}
+
+
+export default App;
