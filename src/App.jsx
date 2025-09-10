@@ -12,10 +12,17 @@ import RecentProperti from './components/RecentProperti';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 
-import Properties from './pages/property';
+
 import ContactPage from './pages/Contact';
 import Login from './components/Login';
 import Register from './components/Register';
+
+import MyProperties from './pages/MyProperties';
+
+import { AuthProvider } from './context/AuthContext'; 
+import { FavouriteProvider } from './context/FavouriteContext'; 
+import Properties from './pages/property';
+import Favourite from './pages/Favourites';
 
 function Home() {
   return (
@@ -35,16 +42,22 @@ function Home() {
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/properties" element={<Properties />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <FavouriteProvider>   
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/properties" element={<Properties/>} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/favourites" element={<Favourite />} /> 
+            <Route path="/my-properties" element={<MyProperties />} />
+          </Routes>
+        </Router>
+      </FavouriteProvider>
+    </AuthProvider>
   );
 }
 
