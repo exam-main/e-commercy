@@ -12,23 +12,23 @@ import RecentProperti from './components/RecentProperti';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 
-
-import Properties from './pages/property';  
-import Contact from './pages/Caontact';
-
+import Properties from './pages/property';
+import ContactPage from './pages/Contact';
+import Login from './components/Login';
+import Register from './components/Register';
 
 function Home() {
   return (
     <>
-      <SearchBar/>
-      <Hero/>
-      <Recommended/>
-      <WhyChooseUs/>
-      <Category1/>
-      <HeroSection/>
-      <RecentProperti/>
-      <Testimonials/>
-      <Footer/>
+      <SearchBar />
+      <Hero />
+      <Recommended />
+      <WhyChooseUs />
+      <Category1 />
+      <HeroSection />
+      <RecentProperti />
+      <Testimonials />
+      <Footer />
     </>
   )
 }
@@ -40,12 +40,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<Properties />} />
-        <Route path="/contact" element={<Contact />} />
-        
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );
 }
-
 
 export default App;
