@@ -2,32 +2,50 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
 
-  const login = (userData) => {
+  // Misol uchun, token saqlansa localStorage dan user ma'lumotini olish
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const login = async (email, password) => {
+    // Bu yerda sizning login fetch/axios so‘rovingiz bo‘ladi
+    const response = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+    const data = await response.json();
     
-    const userWithToken = { ...userData, token: '!@#@!@MIadna' };
-
-    setUser(userWithToken);
-    localStorage.setItem('user', JSON.stringify(userWithToken));
-    localStorage.setItem('accessToken', userWithToken.token);
+    setUser(data.user); // user ni kontekstga saqlaymiz
+    localStorage.setItem('user', JSON.stringify(data.user)); // localStorage ga ham saqlash mumkin
+    localStorage.setItem('token', data.token); // token saqlash
+    
+    return data.user;
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

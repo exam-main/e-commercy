@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     login: "",
     firstName: "",
@@ -20,9 +21,49 @@ function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    // Parol va parol tasdigini solishtirish
+    if (formData.password !== formData.confirmPassword) {
+      alert("Parol va tasdiqlash bir xil emas!");
+      return;
+    }
+
+    // Backend uchun DTO ga mos formatda data tayyorlaymiz
+    const payload = {
+      firstname: formData.firstName,
+      lastname: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      role: formData.userRole.toUpperCase(), // ADMIN yoki USER ko'rinishida
+      phone: "", // agar kerak bo'lsa, input qo'shing yoki bo'sh qoldiring
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Ro'yxatdan o'tishda xatolik yuz berdi");
+        return;
+      }
+
+      const data = await response.json();
+      alert("Ro'yxatdan o'tish muvaffaqiyatli!");
+
+      // Ro'yxatdan o'tgach login sahifasiga o'tamiz
+      navigate("/login");
+    } catch (error) {
+      alert("Ro'yxatdan o'tishda xatolik yuz berdi");
+      console.error(error);
+    }
   };
 
   return (
@@ -83,9 +124,9 @@ function Register() {
           <option value="" disabled>
             User role
           </option>
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
-          <option value="manager">Manager</option>
+          <option value="ADMIN">Admin</option>
+          <option value="USER">User</option>
+          <option value="MANAGER">Manager</option>
         </select>
 
         <input
@@ -115,7 +156,6 @@ function Register() {
           Register
         </button>
 
-        
         <p className="mt-4 text-center text-sm text-gray-600">
           Allaqachon hisobingiz bormi?{" "}
           <Link to="/login" className="text-blue-600 hover:underline">

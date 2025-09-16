@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Contact = () => {
+const Buy = () => {
 
   const [formData, setFormData] = useState({
     name: '',
@@ -45,14 +45,14 @@ const Contact = () => {
       <section className="pt-20 px-6 md:px-16 py-12 bg-gray-50">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6 items-center">
-            Savollaringiz bolsa murojaat qiling
+           
           </h2>
 
-          {/* Contact info bloklar */}
+       
 
           <div className="bg-white shadow rounded-xl p-8">
             <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
-              Murojaatlarni shu yerdan jonating!
+              
             </h2>
 
             <form className="space-y-5 max-w-2xl mx-auto" onSubmit={handleSubmit}>
@@ -117,4 +117,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default Buy;

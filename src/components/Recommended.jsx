@@ -1,52 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const properties = [
-  {
-    id: 1,
-    image: 'public/images/images.png',
-    title: 'New Apartment Nice View',
-    address: 'Quincy St, Brooklyn, NY, USA',
-    beds: 4,
-    baths: 5,
-    garage: 1,
-    area: 1200,
-    price: 7500,
-    oldPrice: 2800,
-    featured: true,
-    forSale: true,
-    userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-  },
-  {
-    id: 2,
-    image: 'public/images/images (1).png',
-    title: 'New Apartment Nice View',
-    address: 'Quincy St, Brooklyn, NY, USA',
-    beds: 4,
-    baths: 5,
-    garage: 1,
-    area: 1200,
-    price: 7500,
-    oldPrice: 2800,
-    featured: true,
-    forSale: true,
-    userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-  {
-    id: 3,
-    image: 'public/images/images (2).png',
-    title: 'New Apartment Nice View',
-    address: 'Quincy St, Brooklyn, NY, USA',
-    beds: 4,
-    baths: 5,
-    garage: 1,
-    area: 1200,
-    price: 7500,
-    oldPrice: 2800,
-    featured: true,
-    forSale: true,
-    userAvatar: 'https://randomuser.me/api/portraits/men/45.jpg',     
-  },
-];
+const fixUrl = (url) => {
+  console.log (url)
+  if (!url) return 'https://i.pravatar.cc/200';
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  if (!url.startsWith('http')) {
+    return `https://i.pravatar.cc/200`;
+  }
+  return url;
+};
 
 const PropertyCard = ({ property, active }) => (
   <div
@@ -56,7 +20,7 @@ const PropertyCard = ({ property, active }) => (
   >
     <div className="relative">
       <img
-        src={property.image}
+        src={fixUrl(property.image)}
         alt={property.title}
         className="rounded-md w-full h-48 object-cover"
       />
@@ -71,7 +35,7 @@ const PropertyCard = ({ property, active }) => (
         </span>
       )}
       <img
-        src={property.userAvatar}
+        src={fixUrl(property.userAvatar)}
         alt="User avatar"
         className="w-10 h-10 rounded-full border-2 border-white absolute bottom-[-15px] right-4"
       />
@@ -153,21 +117,48 @@ const PropertyCard = ({ property, active }) => (
 );
 
 export default function Recommended() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/accommodations')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('API data:', data); 
+        setProperties(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching properties:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-12 bg-gradient-to-b from-[#444] to-[#222]">
+        <div className="max-w-6xl mx-auto px-4 text-center text-white">
+          <h2 className="text-xl font-bold mb-2">Recommended</h2>
+          <p className="text-sm text-gray-300 mb-8">Loading properties...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
- <section className="py-12 bg-gradient-to-b from-[#444] to-[#222]">
-  <div className="max-w-6xl mx-auto px-4 text-center text-white">
-    <h2 className="text-xl font-bold mb-2">Recommended</h2>
-    <p className="text-sm text-gray-300 mb-8">
-      Nulla quis curabitur velit volutpat auctor bibendum consectetur sit.
-    </p>
+    <section className="py-12 bg-gradient-to-b from-[#444] to-[#222]">
+      <div className="max-w-6xl mx-auto px-4 text-center text-white">
+        <h2 className="text-xl font-bold mb-2">Recommended</h2>
+        <p className="text-sm text-gray-300 mb-8">
+          Nulla quis curabitur velit volutpat auctor bibendum consectetur sit.
+        </p>
 
-    <div className="flex gap-6 justify-center overflow-x-auto scrollbar-hide">
-      {properties.map((property, idx) => (
-        <PropertyCard key={property.id} property={property} active={idx === 0} />
-      ))}
-    </div>
-  </div>
-</section>
-
+        <div className="flex gap-6 justify-center overflow-x-auto scrollbar-hide">
+          {properties.map((property, idx) => (
+            <PropertyCard key={property.id} property={property} active={idx === 0} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

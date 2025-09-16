@@ -21,8 +21,12 @@ import MyProperties from './pages/MyProperties';
 
 import { AuthProvider } from './context/AuthContext'; 
 import { FavouriteProvider } from './context/FavouriteContext'; 
-import Properties from './pages/property';
+import Properties from './pages/Property';
 import Favourite from './pages/Favourites';
+import Profile from './pages/Profile';
+import AddNewProperty from './pages/AddNewProperty';
+import PropertyDetails from './pages/PropertyDetails';
+import Buy from './pages/Request';
 
 function Home() {
   return (
@@ -35,7 +39,7 @@ function Home() {
       <HeroSection />
       <RecentProperti />
       <Testimonials />
-      <Footer />
+      
     </>
   )
 }
@@ -54,7 +58,12 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/favourites" element={<Favourite />} /> 
             <Route path="/my-properties" element={<MyProperties />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/add-new-property" element={<AddNewProperty />} />
+            <Route path="/property/:id" element={<PropertyDetails />} />
+            <Route path="/request" element={<Buy />} />
           </Routes>
+          <Footer />
         </Router>
       </FavouriteProvider>
     </AuthProvider>
